@@ -134,7 +134,12 @@
 
 - name: clean,safe delete
   delegate_to: localhost
-  shell: srm "{{ local_config_path }}"
+  shell: |
+    if which srm &>/dev/null; then
+      srm "{{ local_config_path }}"
+    else
+      rm -P "{{ local_config_path }}"
+    fi
   tags: clean
 
 - name: reload
